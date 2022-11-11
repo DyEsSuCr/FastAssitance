@@ -1,0 +1,21 @@
+{% extends 'index.html' %} {% block content %}
+<h1 class="text-3xl font-bold italic text-center mt-20">Inicia seción</h1>
+
+<div>
+  <style>
+    h5 {
+      color: red;
+    }
+  </style>
+  {% for message in messages %}
+  <h5>{{message}}</h5>
+  {% endfor %}
+</div>
+
+<form method="POST">
+  {% csrf_token %}
+  <input type="text" name="username" placeholder="Nombre de usuario" />
+  <input type="password" name="password" placeholder="Contraseña" />
+  <button class="cursor-pointer bg-indigo-600 text-white px-2 py-1">Ingresar</button>
+</form>
+{% endblock %}
