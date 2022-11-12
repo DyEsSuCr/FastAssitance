@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.contrib import messages, auth
 from .forms import SigninForm
 
@@ -31,5 +32,11 @@ def signout(request):
   return redirect('accounts:signin')
 
 
+@login_required()
 def dashboard(request):
   return render(request, 'accounts/dashboard.html')
+
+
+def get_users(request):
+  barbers = get_user_model().objects.all()
+  return render(request, 'accounts/barbers.html', {'barbers': barbers})

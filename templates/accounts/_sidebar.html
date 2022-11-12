@@ -3,12 +3,15 @@
     href="{% url 'accounts:dashboard' %}"
     class="flex items-center active-nav-link text-white py-4 pl-6 nav-item"
   >
-    <i class="fas fa-table mr-3"></i>
+    <i class="fa-solid fa-house mr-3"></i>
     Inicio
   </a>
   {% if perms.app.add_user %}
-  <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-    <i class="fas fa-tachometer-alt mr-3"></i>
+  <a
+    href="{% url 'accounts:barbers' %}"
+    class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
+  >
+    <i class="fa-sharp fa-solid fa-users mr-2"></i>
     Empleados
   </a>
   <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
