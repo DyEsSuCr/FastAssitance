@@ -1,17 +1,6 @@
 {% extends 'index.html' %} {% block content %}
 <h1 class="text-3xl font-bold italic text-center mt-20 mb-4 text-indigo-800">Inicia seción</h1>
 
-<div>
-  <style>
-    h5 {
-      color: red;
-    }
-  </style>
-  {% for message in messages %}
-  <h5>{{message}}</h5>
-  {% endfor %}
-</div>
-
 <div class="mx-auto w-full max-w-[550px]">
   <form method="POST">
     {% csrf_token %} {{ signin_form }}
@@ -20,6 +9,9 @@
     >
       Ingresar
     </button>
+    {% for message in messages %}
+    <h5 class="text-red-500 text-center text-lg">{{message}}</h5>
+    {% endfor %}
   </form>
 </div>
 {% endblock %}

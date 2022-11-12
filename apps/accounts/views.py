@@ -22,10 +22,10 @@ def signin(request):
         return redirect('accounts:dashboard')
       else:
         messages.info(request, 'Credenciales invalidas')
-        return redirect('signin')
+        return redirect('accounts:signin')
 
 
-@login_required(login_url='accounts:signin')
+@login_required()
 def signout(request):
   auth.logout(request)
   return redirect('accounts:signin')
