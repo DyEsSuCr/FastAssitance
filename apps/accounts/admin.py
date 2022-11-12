@@ -6,13 +6,10 @@ from .models import User
 # Register your models here.
 
 class CustomUserAdmin(UserAdmin):
-  readonly_fields = ('last_login', 'date_joined', 'created_at')
-  
-
-class UserAdmin(admin.ModelAdmin):
-  readonly_fields = ('last_login', 'date_joined', 'created_at')
+  readonly_fields = ('created_at',)
+  list_display = ('username', 'img_profile', 'is_admin',)
+  list_editable = ('img_profile', 'is_admin',)
 
 
 admin.site.register(Permission)
 admin.site.register(User, CustomUserAdmin)
-# admin.site.register(User, UserAdmin)
