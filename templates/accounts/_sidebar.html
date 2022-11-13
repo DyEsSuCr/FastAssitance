@@ -6,7 +6,7 @@
     <i class="fa-solid fa-house mr-3"></i>
     Inicio
   </a>
-  {% if perms.app.add_user %}
+  {% if user.role == 'Admin' %}
   <a
     href="{% url 'accounts:barbers' %}"
     class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
@@ -18,9 +18,9 @@
     <i class="fas fa-tachometer-alt mr-3"></i>
     Horarios
   </a>
-  <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-    <i class="fas fa-sticky-note mr-3"></i>
-    Reportes
-  </a>
   {% endif %}
+  <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+    <i class="fas fa-tachometer-alt mr-3"></i>
+    Turnos
+  </a>
 </nav>

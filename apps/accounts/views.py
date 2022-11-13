@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages, auth
 from .forms import SigninForm
-from django.contrib.auth.models import User
+from .models import EmployeeProfile
 
+# Register your views here.
 
 def signin(request):
     if request.method == 'GET':
@@ -42,7 +43,7 @@ def dashboard(request):
 @login_required()
 def get_users(request):
   if request.method == 'GET':
-    barbers = get_user_model().objects.all()
+    barbers = EmployeeProfile.objects.all()
     return render(request, 'accounts/barbers.html', {'barbers': barbers})
 
 
