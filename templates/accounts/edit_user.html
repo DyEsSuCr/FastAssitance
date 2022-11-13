@@ -1,0 +1,227 @@
+{% extends 'accounts/base_dashboard.html' %} {% block content %}
+<div class="bg-gray-100 font-family-karla flex">
+  <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+    <div class="p-6">
+      <a
+        href="{% url 'accounts:dashboard' %}"
+        class="text-white text-2xl font-semibold uppercase hover:text-gray-300"
+        >FastAssitance</a
+      >
+    </div>
+    {% include 'accounts/_sidebar.html' %}
+    <a
+      href="#"
+      class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4"
+    >
+      <i class="fas fa-arrow-circle-up mr-3"></i>
+      Settings
+    </a>
+  </aside>
+
+  <div class="relative w-full flex flex-col h-screen overflow-y-hidden">
+    <!-- Desktop Header -->
+    <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+      <div class="w-1/2"></div>
+      <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
+        <span class="mr-2 flex items-center">
+          <i class="uppercase">Hola <b class="Hola">{{ user.username }}</b> </i>
+        </span>
+        <button
+          @click="isOpen = !isOpen"
+          class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none"
+        >
+          <img src="{{ user.get_photo }}" alt="{{ user.username }}" />
+        </button>
+        <button
+          x-show="isOpen"
+          @click="isOpen = false"
+          class="h-full w-full fixed inset-0 cursor-default"
+        ></button>
+        <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+          <a href="{% url 'accounts:edit_user' %}" class="block px-4 py-2 account-link hover:text-white"
+            >Perfil</a
+          >
+          <a href="/logout" class="block px-4 py-2 account-link hover:text-white">Salir</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Header & Nav -->
+    <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
+      <div class="flex items-center justify-between">
+        <a href="index.html" class="text-white text-2xl font-semibold uppercase hover:text-gray-300"
+          >FastAssitance</a
+        >
+        <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
+          <i x-show="!isOpen" class="fas fa-bars"></i>
+          <i x-show="isOpen" class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Dropdown Nav -->
+      <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+        <a
+          href="index.html"
+          class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
+        >
+          <i class="fas fa-tachometer-alt mr-3"></i>
+          Empleados
+        </a>
+        <a
+          href="blank.html"
+          class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
+        >
+          <i class="fas fa-sticky-note mr-3"></i>
+          Horarios
+        </a>
+        <a href="tables.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
+          <i class="fas fa-table mr-3"></i>
+          Reportes
+        </a>
+        <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+          <i class="fas fa-user mr-3"></i>
+          Perfil
+        </a>
+        <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+          <i class="fas fa-sign-out-alt mr-3"></i>
+          Salir
+        </a>
+        <button
+          class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center"
+        >
+          <i class="fas fa-arrow-circle-up mr-3"></i> Settings
+        </button>
+      </nav>
+    </header>
+
+    <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
+      <main class="w-full flex-grow p-6">
+        <div class="flex items-center justify-center p-12">
+          <div class="mx-auto w-full max-w-[550px]">
+            <form method="POST" accept="image/*" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="mb-5">
+                <label for="username" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Nombre de usuario
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  placeholder="Nombre de usuario"
+                  required
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="password1" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  name="password1"
+                  id="password1"
+                  placeholder="Contraseña"
+                  required
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="password2" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Confirmar Contraseña
+                </label>
+                <input
+                  type="password"
+                  name="password2"
+                  id="password2"
+                  placeholder="Confirmar Contraseña"
+                  required
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="firt_name" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Nombres
+                </label>
+                <input
+                  type="text"
+                  name="first_name"
+                  id="first_name"
+                  placeholder="Nombres"
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="last_name" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Apellidos
+                </label>
+                <input
+                  type="text"
+                  name="last_name"
+                  id="last_name"
+                  placeholder="Apellidos"
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="email" class="mb-3 block text-base font-medium text-[#07074D]"> Correo </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="admin@fast.com"
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="img_profile" class="mb-3 block text-base font-medium text-[#07074D]">
+                  Imagen de perfil
+                </label>
+                <input
+                  type="file"
+                  name="img_profile"
+                  id="img_profile"
+                  accept="image/*"
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div class="mb-5">
+                <label for="is_admin" class="mb-3 block text-base font-medium text-[#07074D]">
+                  ¿Usuario Admin?
+                </label>
+                <input
+                  type="checkbox"
+                  name="is_admin"
+                  id="is_admin"
+                  class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+
+              <div>
+                <button
+                  class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"
+                >
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <footer class="w-full bg-white text-right p-4">
+        Built by
+        <a target="_blank" href="https://www.linkedin.com/in/dylansuarez/" class="underline">DyEsSuCr</a>.
+      </footer>
+    </div>
+  </div>
+</div>
+{% endblock %}
