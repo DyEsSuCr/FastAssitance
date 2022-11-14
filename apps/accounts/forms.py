@@ -27,9 +27,9 @@ class SigninForm(forms.ModelForm):
 
 # terminal
 class CreateEmployeeForm(UserCreationForm):
-  class Meta(UserCreationForm.Meta):
-    password1 = forms.CharField(required=True, label='Contraseña', widget=forms.PasswordInput(), help_text=('Just Enter the same password, for confirmation'))
-    password2 = forms.CharField(required=True, label='Confirmar Contraseña', widget=forms.PasswordInput(), help_text=('Just Enter the same password, for confirmation'))
+  class Meta():
+    password1 = forms.CharField(required=True, label='Contraseña', widget=forms.PasswordInput())
+    password2 = forms.CharField(required=True, label='Confirmar Contraseña', widget=forms.PasswordInput())
 
     model = EmployeeProfile
 

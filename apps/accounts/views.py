@@ -49,18 +49,26 @@ def create_employee(request):
     if request.POST["password1"] == request.POST["password2"]:
       try:
 
+        business = request.user.business
+        admin = request.user
+
         user = EmployeeProfile.objects.create_user(
           username = request.POST["username"],
-          password = request.POST["password1"]
+          password = request.POST["password1"],
+          first_name = request.POST["first_name"],
+          last_name = request.POST["last_name"],
+          email = request.POST["email"],
+          img_profile = request.FILES.get("img_profile", None),
+          business = business,
         )
 
         user.save()
-        return redirect('accounts/barbers.html')
+        return redirect('accounts:barbers')
 
       except IntegrityError:
-        return render(request, 'accounts/barbers.html', {"form": CreateEmployeeForm, "error": "El nombre de usuario ya existe!."})
+        return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm, "error": "El nombre de usuario ya existe!."})
 
-    return render(request, 'accounts/barbers.html', {"form": CreateEmployeeForm, "error": "Las contraseñas no coninciden"})
+    return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm, "error": "Las contraseñas no coninciden"})
 
 
 @login_required()

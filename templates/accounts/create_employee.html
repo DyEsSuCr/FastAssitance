@@ -8,7 +8,30 @@
         >FastAssitance</a
       >
     </div>
-    {% include 'accounts/_sidebar.html' %}
+    <nav class="text-white text-base font-semibold pt-3">
+      <a
+        href="{% url 'accounts:dashboard' %}"
+        class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
+      >
+        <i class="fa-solid fa-house mr-3"></i>
+        Inicio
+      </a>
+      <a
+        href="{% url 'accounts:barbers' %}"
+        class="flex items-center active-nav-link text-white py-4 pl-6 nav-item"
+      >
+        <i class="fa-sharp fa-solid fa-users mr-2"></i>
+        Empleados
+      </a>
+      <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <i class="fas fa-tachometer-alt mr-3"></i>
+        Horarios
+      </a>
+      <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <i class="fas fa-tachometer-alt mr-3"></i>
+        Turnos
+      </a>
+    </nav>
     <a
       href="#"
       class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4"
@@ -27,7 +50,7 @@
         <div class="flex items-center justify-center p-12">
           <div class="mx-auto w-full max-w-[550px]">
             <form method="POST" accept="image/*" enctype="multipart/form-data">
-              {% csrf_token %} {{ form.as_p }}
+              {% csrf_token %} {{ form }}
 
               <div>
                 <button
