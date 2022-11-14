@@ -6,7 +6,7 @@
     <i class="fa-solid fa-house mr-3"></i>
     Inicio
   </a>
-  {% if user.role == 'Admin' %}
+  {% if user.role == 'AD' %}
   <a
     href="{% url 'accounts:barbers' %}"
     class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"

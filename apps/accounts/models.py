@@ -4,15 +4,19 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class UserProfile(AbstractUser):
-  class Role(models.TextChoices):
-    ADMIN = 'Admin'
-    EMPLOYEE = 'Employee'
+  ADMIN = 'AD'
+  EMPLOYEE = 'EM'
 
-  base_role = Role.ADMIN
+  ROLE = [
+    (ADMIN, 'Administrador'),
+    (EMPLOYEE, 'Empleado')
+  ]
+
+  base_role = ADMIN
   
   img_profile = models.ImageField(upload_to='photo', blank=True, null=True, verbose_name='Imagen de perfil')
   created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Fecha de creación')
-  role = models.CharField(max_length=50, choices=Role.choices, verbose_name='Rol')
+  role = models.CharField(max_length=50, choices=ROLE, verbose_name='Rol')
 
   class Meta:
     ordering = ["created_at"]
@@ -25,6 +29,7 @@ class UserProfile(AbstractUser):
     if not self.pk:
       self.role = self.base_role
       return super().save(*args, **kwargs)
+    return super().save(*args, **kwargs)
 
 
   @property
@@ -36,17 +41,18 @@ class UserProfile(AbstractUser):
 
 class AdminProfile(UserProfile):
 
-  base_role = UserProfile.Role.ADMIN
+  base_role = UserProfile.ADMIN
 
   class Meta:
     verbose_name = 'Administrador'
     verbose_name_plural = 'Administradores'
+    proxy: True
 
 
 class EmployeeProfile(UserProfile):
 
   user = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True, blank=True)
-  base_role = UserProfile.Role.EMPLOYEE
+  base_role = UserProfile.EMPLOYEE
 
   class Meta:
     verbose_name = 'Empleado'
