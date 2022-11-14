@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
-from django.contrib.auth import login
 from django.db import IntegrityError
 
 from .forms import SigninForm, CreateEmployeeForm
@@ -45,7 +44,7 @@ def dashboard(request):
 @login_required()
 def create_employee(request):
   if request.method == 'GET':
-    return render(request, 'create_employee.html', {"form": CreateEmployeeForm})
+    return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm})
   else:
     if request.POST["password1"] == request.POST["password2"]:
       try:
@@ -56,8 +55,6 @@ def create_employee(request):
         )
 
         user.save()
-        login(request, user)
-
         return redirect('accounts/barbers.html')
 
       except IntegrityError:
