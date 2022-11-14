@@ -66,7 +66,7 @@ def create_employee(request):
 @login_required()
 def get_users(request):
   if request.method == 'GET':
-    barbers = EmployeeProfile.objects.filter(user=request.user)
+    barbers = EmployeeProfile.objects.filter(business=request.user.business)
     return render(request, 'accounts/barbers.html', {'barbers': barbers})
 
 

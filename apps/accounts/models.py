@@ -3,6 +3,29 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+class Business(models.Model):
+  name = models.CharField('Nombre', max_length=60)
+  address = models.CharField('Direccion', max_length=50)
+  phone_number = models.CharField('Telefono', max_length=12)
+  img_business = models.ImageField('Imagen del negocio', upload_to='business', blank=True, null=True)
+
+  class Meta:
+    ordering = ["-name"]
+    verbose_name = 'Negocio'
+    verbose_name_plural = 'Negocios'
+    
+
+  def __str__(self):
+    return f'{self.name}'
+
+
+  @property
+  def get_photo(self):
+    if self.img_business:
+      return self.img_business.url
+    return 'https://www.mifoto.cl/wp-content/uploads/2022/01/sin-imagen.jpg'
+
+
 class UserProfile(AbstractUser):
   ADMIN = 'AD'
   EMPLOYEE = 'EM'
@@ -17,6 +40,7 @@ class UserProfile(AbstractUser):
   img_profile = models.ImageField(upload_to='photo', blank=True, null=True, verbose_name='Imagen de perfil')
   created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Fecha de creación')
   role = models.CharField(max_length=50, choices=ROLE, verbose_name='Rol')
+  business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Negocio')
 
   class Meta:
     ordering = ["created_at"]
@@ -37,7 +61,7 @@ class UserProfile(AbstractUser):
     if self.img_profile:
       return self.img_profile.url
     return 'https://www.fundacionmsc.cl/wp-content/uploads/2019/05/sin-imagen-2.png'
-
+  
 
 class AdminProfile(UserProfile):
 
@@ -51,7 +75,7 @@ class AdminProfile(UserProfile):
 
 class EmployeeProfile(UserProfile):
 
-  user = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True, blank=True)
+  user = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Creado por')
   base_role = UserProfile.EMPLOYEE
 
   class Meta:
