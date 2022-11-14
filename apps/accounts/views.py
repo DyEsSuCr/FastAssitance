@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
 from django.contrib import messages, auth
-from .forms import SigninForm
+from django.contrib.auth import login
+from django.db import IntegrityError
+
+from .forms import SigninForm, CreateEmployeeForm
 from .models import EmployeeProfile
 
 # Register your views here.
@@ -39,11 +41,35 @@ def dashboard(request):
   if request.method == 'GET':
     return render(request, 'accounts/dashboard.html')
 
+# terminar
+@login_required()
+def create_employee(request):
+  if request.method == 'GET':
+    return render(request, 'create_employee.html', {"form": CreateEmployeeForm})
+  else:
+    if request.POST["password1"] == request.POST["password2"]:
+      try:
+
+        user = EmployeeProfile.objects.create_user(
+          username = request.POST["username"],
+          password = request.POST["password1"]
+        )
+
+        user.save()
+        login(request, user)
+
+        return redirect('accounts/barbers.html')
+
+      except IntegrityError:
+        return render(request, 'accounts/barbers.html', {"form": CreateEmployeeForm, "error": "El nombre de usuario ya existe!."})
+
+    return render(request, 'accounts/barbers.html', {"form": CreateEmployeeForm, "error": "Las contraseñas no coninciden"})
+
 
 @login_required()
 def get_users(request):
   if request.method == 'GET':
-    barbers = EmployeeProfile.objects.all()
+    barbers = EmployeeProfile.objects.filter(user=request.user)
     return render(request, 'accounts/barbers.html', {'barbers': barbers})
 
 

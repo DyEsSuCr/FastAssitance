@@ -12,7 +12,7 @@ class UserProfile(AbstractUser):
   
   img_profile = models.ImageField(upload_to='photo', blank=True, null=True, verbose_name='Imagen de perfil')
   created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Fecha de creación')
-  role = models.CharField(max_length=50, choices=Role.choices)
+  role = models.CharField(max_length=50, choices=Role.choices, verbose_name='Rol')
 
   class Meta:
     ordering = ["created_at"]
@@ -34,8 +34,18 @@ class UserProfile(AbstractUser):
     return 'https://www.fundacionmsc.cl/wp-content/uploads/2019/05/sin-imagen-2.png'
 
 
+class AdminProfile(UserProfile):
+
+  base_role = UserProfile.Role.ADMIN
+
+  class Meta:
+    verbose_name = 'Administrador'
+    verbose_name_plural = 'Administradores'
+
+
 class EmployeeProfile(UserProfile):
 
+  user = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True, blank=True)
   base_role = UserProfile.Role.EMPLOYEE
 
   class Meta:
