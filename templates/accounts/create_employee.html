@@ -50,7 +50,9 @@
         <div class="flex items-center justify-center p-12">
           <div class="mx-auto w-full max-w-[550px]">
             <form method="POST" accept="image/*" enctype="multipart/form-data">
-              {% csrf_token %} {{ form }}
+              {% csrf_token %}
+              <h1 class="text-red-600 text-xl mb-3">{{ error }}</h1>
+              {{ form }}
 
               <div>
                 <button

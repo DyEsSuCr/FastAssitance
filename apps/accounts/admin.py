@@ -18,6 +18,7 @@ class ProfileAdmin(UserAdmin):
 class EmployeeProfileAdmin(UserAdmin):
   list_display = ('username', 'img_profile', 'role', 'user', 'business')
   list_editable = ('img_profile', 'user', 'business')
+  ordering = ['business']
 
 
 class AdminProfileAdmin(UserAdmin):
