@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.db import IntegrityError
 
-from .forms import SigninForm, CreateEmployeeForm
-from .models import AdminProfile, EmployeeProfile
+from .forms import SigninForm, CreateEmployeeForm, CreateAdminForm
+from .models import UserProfile, AdminProfile, EmployeeProfile
 
 # Register your views here.
 
@@ -71,9 +71,36 @@ def create_employee(request):
 
 
 @login_required()
+def create_admin(request):
+  if request.method == 'GET':
+    return render(request, 'accounts/create_admin.html', {"form": CreateAdminForm})
+  else:
+    if request.POST["password1"] == request.POST["password2"]:
+
+      try:
+        user = AdminProfile.objects.create_user(
+          username = request.POST["username"],
+          password = request.POST["password1"],
+          first_name = request.POST["first_name"],
+          last_name = request.POST["last_name"],
+          email = request.POST["email"],
+          img_profile = request.FILES.get("img_profile", None),
+          business = request.user.business,
+        )
+
+        user.save()
+        return redirect('accounts:barbers')
+
+      except IntegrityError:
+        return render(request, 'accounts/create_employee.html', {"form": CreateAdminForm, "error": "Nombre de usuario ya existe"})
+
+    return render(request, 'accounts/create_employee.html', {"form": CreateAdminForm, "error": "Las contraseñas no coninciden"})
+
+
+@login_required()
 def get_users(request):
   if request.method == 'GET':
-    barbers = EmployeeProfile.objects.filter(business=request.user.business)
+    barbers = UserProfile.objects.filter(business=request.user.business)
     return render(request, 'accounts/barbers.html', {'barbers': barbers})
 
 
