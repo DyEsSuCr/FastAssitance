@@ -4,7 +4,7 @@ from django.contrib import messages, auth
 from django.db import IntegrityError
 
 from .forms import SigninForm, CreateEmployeeForm
-from .models import EmployeeProfile
+from .models import AdminProfile, EmployeeProfile
 
 # Register your views here.
 
@@ -47,6 +47,8 @@ def create_employee(request):
     return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm})
   else:
     if request.POST["password1"] == request.POST["password2"]:
+      user = AdminProfile.objects.get(pk=request.user)
+
       try:
         user = EmployeeProfile.objects.create_user(
           username = request.POST["username"],
@@ -56,6 +58,7 @@ def create_employee(request):
           email = request.POST["email"],
           img_profile = request.FILES.get("img_profile", None),
           business = request.user.business,
+          user = user,
         )
 
         user.save()
