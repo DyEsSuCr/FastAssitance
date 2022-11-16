@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.db import IntegrityError
 
-from .forms import SigninForm, CreateEmployeeForm, CreateAdminForm
+from .forms import SigninForm, CreateUserForm
 from .models import UserProfile, AdminProfile, EmployeeProfile
 
 # Register your views here.
@@ -42,59 +42,55 @@ def dashboard(request):
 
 # terminar
 @login_required()
-def create_employee(request):
+def create_user(request):
   if request.method == 'GET':
-    return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm})
+    return render(request, 'accounts/create_user.html', {"form": CreateUserForm})
   else:
-    if request.POST["password1"] == request.POST["password2"]:
-      user = AdminProfile.objects.get(pk=request.user)
+    if request.POST.get('is_admin') == 'on':
+      if request.POST["password1"] == request.POST["password2"]:
 
-      try:
-        user = EmployeeProfile.objects.create_user(
-          username = request.POST["username"],
-          password = request.POST["password1"],
-          first_name = request.POST["first_name"],
-          last_name = request.POST["last_name"],
-          email = request.POST["email"],
-          img_profile = request.FILES.get("img_profile", None),
-          business = request.user.business,
-          user = user,
-        )
+        try:
+          user = AdminProfile.objects.create_user(
+            username = request.POST["username"],
+            password = request.POST["password1"],
+            first_name = request.POST["first_name"],
+            last_name = request.POST["last_name"],
+            email = request.POST["email"],
+            img_profile = request.FILES.get("img_profile", None),
+            business = request.user.business,
+          )
 
-        user.save()
-        return redirect('accounts:barbers')
+          user.save()
+          return redirect('accounts:barbers')
 
-      except IntegrityError:
-        return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm, "error": "Nombre de usuario ya existe"})
+        except IntegrityError:
+          return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
 
-    return render(request, 'accounts/create_employee.html', {"form": CreateEmployeeForm, "error": "Las contraseñas no coninciden"})
+      return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Las contraseñas no coninciden"})
+      
+    else:
+      if request.POST["password1"] == request.POST["password2"]:
+        user = AdminProfile.objects.get(pk=request.user)
 
+        try:
+          user = EmployeeProfile.objects.create_user(
+            username = request.POST["username"],
+            password = request.POST["password1"],
+            first_name = request.POST["first_name"],
+            last_name = request.POST["last_name"],
+            email = request.POST["email"],
+            img_profile = request.FILES.get("img_profile", None),
+            business = request.user.business,
+            user = user,
+          )
 
-@login_required()
-def create_admin(request):
-  if request.method == 'GET':
-    return render(request, 'accounts/create_admin.html', {"form": CreateAdminForm})
-  else:
-    if request.POST["password1"] == request.POST["password2"]:
+          user.save()
+          return redirect('accounts:barbers')
 
-      try:
-        user = AdminProfile.objects.create_user(
-          username = request.POST["username"],
-          password = request.POST["password1"],
-          first_name = request.POST["first_name"],
-          last_name = request.POST["last_name"],
-          email = request.POST["email"],
-          img_profile = request.FILES.get("img_profile", None),
-          business = request.user.business,
-        )
+        except IntegrityError:
+          return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
 
-        user.save()
-        return redirect('accounts:barbers')
-
-      except IntegrityError:
-        return render(request, 'accounts/create_employee.html', {"form": CreateAdminForm, "error": "Nombre de usuario ya existe"})
-
-    return render(request, 'accounts/create_employee.html', {"form": CreateAdminForm, "error": "Las contraseñas no coninciden"})
+      return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Las contraseñas no coninciden"})
 
 
 @login_required()
