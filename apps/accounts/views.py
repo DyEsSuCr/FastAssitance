@@ -61,7 +61,7 @@ def create_user(request):
           )
 
           user.save()
-          return redirect('accounts:barbers')
+          return redirect('accounts:user')
 
         except IntegrityError:
           return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
@@ -85,7 +85,7 @@ def create_user(request):
           )
 
           user.save()
-          return redirect('accounts:barbers')
+          return redirect('accounts:users')
 
         except IntegrityError:
           return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
@@ -96,8 +96,8 @@ def create_user(request):
 @login_required()
 def get_users(request):
   if request.method == 'GET':
-    barbers = UserProfile.objects.filter(business=request.user.business)
-    return render(request, 'accounts/barbers.html', {'barbers': barbers})
+    users = UserProfile.objects.filter(business=request.user.business)
+    return render(request, 'accounts/users.html', {'users': users})
 
 
 @login_required()

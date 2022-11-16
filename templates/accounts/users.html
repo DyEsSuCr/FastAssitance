@@ -18,7 +18,7 @@
         Inicio
       </a>
       <a
-        href="{% url 'accounts:barbers' %}"
+        href="{% url 'accounts:users' %}"
         class="flex items-center active-nav-link text-white py-4 pl-6 nav-item"
       >
         <i class="fa-sharp fa-solid fa-users mr-2"></i>
@@ -160,34 +160,34 @@
                 </tr>
               </thead>
               <tbody>
-                {% for barber in barbers %}
+                {% for user in users %}
                 <tr>
                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <div class="flex items-center">
                       <div class="flex-shrink-0 w-10 h-10">
                         <img
                           class="w-full h-full rounded-full"
-                          src="{{ barber.get_photo }}"
-                          alt="{{ barber.username }}"
+                          src="{{ user.get_photo }}"
+                          alt="{{ user.username }}"
                         />
                       </div>
                       <div class="ml-3">
-                        <p class="text-gray-900 whitespace-no-wrap">{{ barber.username }}</p>
+                        <p class="text-gray-900 whitespace-no-wrap">{{ user.username }}</p>
                       </div>
                     </div>
                   </td>
                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {% if barber.role == 'AD' %}
+                    {% if user.role == 'AD' %}
                     <p class="text-gray-900 whitespace-no-wrap">Admin</p>
                     {% else %}
                     <p class="text-gray-900 whitespace-no-wrap">Barbero</p>
                     {% endif %}
                   </td>
                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <p class="text-gray-900 whitespace-no-wrap">{{ barber.created_at }}</p>
+                    <p class="text-gray-900 whitespace-no-wrap">{{ user.created_at }}</p>
                   </td>
                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {% if barber.is_active %}
+                    {% if user.is_active %}
                     <span
                       class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
                     >
