@@ -61,7 +61,7 @@ def create_user(request):
           )
 
           user.save()
-          return redirect('accounts:user')
+          return redirect('accounts:users')
 
         except IntegrityError:
           return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
@@ -101,6 +101,17 @@ def get_users(request):
 
 
 @login_required()
-def edit_user(request):
+def user_detail(request, uname):
   if request.method == 'GET':
-    return render(request, 'accounts/edit_user.html')
+    user = get_object_or_404(UserProfile, username=uname)
+    form = CreateUserForm(instance=user)
+
+    return render(request, 'accounts/user_detail.html', {'form': form})
+
+
+@login_required()
+def delete_user(request, uname):
+  if request.method == 'GET':
+    user = get_object_or_404(UserProfile, username=uname)
+    user.delete()
+    return redirect('accounts:users')

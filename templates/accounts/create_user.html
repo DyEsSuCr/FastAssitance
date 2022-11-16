@@ -53,7 +53,11 @@
               {% csrf_token %}
               <h1 class="text-red-600 text-xl mb-3">{{ error }}</h1>
               {{ form }}
-
+              <hr />
+              {% if user.role == 'AD'%}
+              <label for="id_is_admin">¿Usuario aminstradors?</label>
+              <input type="checkbox" id="id_is_admin" name="is_admin" class="mb-5 ml-3" />
+              {% endif %}
               <div>
                 <button
                   class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"

@@ -7,5 +7,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/users/', views.get_users , name='users'),
     path('dashboard/create_user/', views.create_user , name='create_user'),
-    path('dashboard/edit_user/', views.edit_user , name='edit_user'),
+    path('dashboard/user/<str:uname>/', views.user_detail , name='user_detail'),
+    path('dashboard/delete_user/<str:uname>/', views.delete_user , name='delete_user'),
 ]

@@ -39,16 +39,11 @@ class CreateUserForm(forms.ModelForm):
     })
   )
 
-  is_admin = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
-      'class': 'mb-6'
-    })
-  )
-
   
   class Meta():
     model = UserProfile
 
-    fields = 'username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'img_profile', 'is_admin'
+    fields = 'username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'img_profile'
 
     help_texts = {
       'username': None,

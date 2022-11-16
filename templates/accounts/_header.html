@@ -9,7 +9,7 @@
       @click="isOpen = !isOpen"
       class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none"
     >
-      <img src="{{ user.get_photo }}" alt="{{ user.username }}" />
+      <img src="{{ user.get_photo }}" alt="{{ user.username }}" class="w-full h-full rounded-full" />
     </button>
     <button
       x-show="isOpen"
@@ -17,7 +17,9 @@
       class="h-full w-full fixed inset-0 cursor-default"
     ></button>
     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-      <a href="{% url 'accounts:edit_user' %}" class="block px-4 py-2 account-link hover:text-white"
+      <a
+        href="{% url 'accounts:user_detail' user.username %}"
+        class="block px-4 py-2 account-link hover:text-white"
         >Perfil</a
       >
       <a href="{% url 'accounts:signout' %}" class="block px-4 py-2 account-link hover:text-white">Salir</a>
