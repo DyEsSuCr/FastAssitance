@@ -54,7 +54,7 @@
               <h1 class="text-red-600 text-xl mb-3">{{ error }}</h1>
               {{ form }}
               <hr />
-              {% if user.role == 'AD'%}
+              {% if user.role == 'ADMIN'%}
               <label for="id_is_admin">¿Usuario aminstradors?</label>
               <input type="checkbox" id="id_is_admin" name="is_admin" class="mb-5 ml-3" />
               {% endif %}

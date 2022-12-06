@@ -27,20 +27,18 @@ class Business(models.Model):
 
 
 class UserProfile(AbstractUser):
-  ADMIN = 'AD'
-  EMPLOYEE = 'EM'
+  ADMIN = 'ADMIN'
+  EMPLOYEE = 'EMPLOYEE'
 
   ROLE = [
     (ADMIN, 'Administrador'),
     (EMPLOYEE, 'Empleado')
   ]
-
-  base_role = ADMIN
   
-  img_profile = models.ImageField(upload_to='photo', blank=True, null=True, verbose_name='Imagen de perfil')
-  created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Fecha de creación')
-  role = models.CharField(max_length=50, choices=ROLE, verbose_name='Rol')
-  business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Negocio')
+  img_profile = models.ImageField('Imagen de perfil', upload_to='photo', blank=True, null=True)
+  created_at = models.DateTimeField('Fecha de creación', auto_now=True, auto_now_add=False)
+  role = models.CharField('Rol', max_length=50, choices=ROLE)
+  business = models.ForeignKey(Business, on_delete=models.CASCADE, default=EMPLOYEE, null=True, blank=True)
 
   class Meta:
     ordering = ["created_at"]
@@ -49,36 +47,8 @@ class UserProfile(AbstractUser):
     verbose_name_plural = 'Usuarios'
 
 
-  def save(self, *args, **kwargs):
-    if not self.pk:
-      self.role = self.base_role
-      return super().save(*args, **kwargs)
-    return super().save(*args, **kwargs)
-
-
   @property
   def get_photo(self):
     if self.img_profile:
       return self.img_profile.url
     return 'https://www.fundacionmsc.cl/wp-content/uploads/2019/05/sin-imagen-2.png'
-  
-
-class AdminProfile(UserProfile):
-
-  base_role = UserProfile.ADMIN
-
-  class Meta:
-    verbose_name = 'Administrador'
-    verbose_name_plural = 'Administradores'
-    proxy: True
-
-
-class EmployeeProfile(UserProfile):
-
-  user = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Creado por')
-  base_role = UserProfile.EMPLOYEE
-
-  class Meta:
-    verbose_name = 'Empleado'
-    verbose_name_plural = 'Empleados'
-    proxy: True

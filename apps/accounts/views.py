@@ -2,11 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.db import IntegrityError
+from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DeleteView, DetailView
 
 from .forms import SigninForm, CreateUserForm
-from .models import UserProfile, AdminProfile, EmployeeProfile
+from .models import UserProfile
 
 # Register your views here.
+
+class signinView(TemplateView):
+  pass
 
 def signin(request):
     if request.method == 'GET':
@@ -47,50 +51,30 @@ def create_user(request):
     return render(request, 'accounts/create_user.html', {"form": CreateUserForm})
   else:
     if request.POST.get('is_admin') == 'on':
-      if request.POST["password1"] == request.POST["password2"]:
-
-        try:
-          user = AdminProfile.objects.create_user(
-            username = request.POST["username"],
-            password = request.POST["password1"],
-            first_name = request.POST["first_name"],
-            last_name = request.POST["last_name"],
-            email = request.POST["email"],
-            img_profile = request.FILES.get("img_profile", None),
-            business = request.user.business,
-          )
-
-          user.save()
-          return redirect('accounts:users')
-
-        except IntegrityError:
-          return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
-
-      return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Las contraseñas no coninciden"})
-      
+      role = 'ADMIN'
     else:
-      if request.POST["password1"] == request.POST["password2"]:
-        user = AdminProfile.objects.get(pk=request.user)
+      role = 'EMPLOYEE'
+    if request.POST["password1"] == request.POST["password2"]:
 
-        try:
-          user = EmployeeProfile.objects.create_user(
-            username = request.POST["username"],
-            password = request.POST["password1"],
-            first_name = request.POST["first_name"],
-            last_name = request.POST["last_name"],
-            email = request.POST["email"],
-            img_profile = request.FILES.get("img_profile", None),
-            business = request.user.business,
-            user = user,
-          )
+      try:
+        user = UserProfile.objects.create_user(
+          username = request.POST["username"],
+          password = request.POST["password1"],
+          first_name = request.POST["first_name"],
+          last_name = request.POST["last_name"],
+          email = request.POST["email"],
+          img_profile = request.FILES.get("img_profile", None),
+          business = request.user.business,
+          role = role
+        )
 
-          user.save()
-          return redirect('accounts:users')
+        user.save()
+        return redirect('accounts:users')
 
-        except IntegrityError:
-          return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
+      except IntegrityError:
+        return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Nombre de usuario ya existe"})
 
-      return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Las contraseñas no coninciden"})
+    return render(request, 'accounts/create_user.html', {"form": CreateUserForm, "error": "Las contraseñas no coninciden"})
 
 
 @login_required()
