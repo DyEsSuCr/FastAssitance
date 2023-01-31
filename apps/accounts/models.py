@@ -14,10 +14,8 @@ class Business(models.Model):
     verbose_name = 'Negocio'
     verbose_name_plural = 'Negocios'
     
-
   def __str__(self):
     return f'{self.name}'
-
 
   @property
   def get_photo(self):
@@ -45,7 +43,6 @@ class UserProfile(AbstractUser):
     db_table = 'auth_user'
     verbose_name = 'Usuario'
     verbose_name_plural = 'Usuarios'
-
 
   @property
   def get_photo(self):
