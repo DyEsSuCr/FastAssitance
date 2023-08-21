@@ -24,7 +24,8 @@ DJANGO_APPS = [
 ]
 
 LOCAL_APPS = [
-    'apps.business'
+    'apps.business',
+    'apps.users'
 ]
 
 THIRD_APPS = [
@@ -88,7 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -105,3 +106,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'users:signin'
+AUTH_USER_MODEL = 'users.Profile'
