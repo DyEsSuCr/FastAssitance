@@ -24,7 +24,7 @@ DJANGO_APPS = [
 ]
 
 LOCAL_APPS = [
-    
+    'apps.business'
 ]
 
 THIRD_APPS = [
